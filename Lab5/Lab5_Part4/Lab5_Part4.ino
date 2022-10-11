@@ -1,9 +1,8 @@
+#include "IntervalTimer.h"
+
 #define SRCLK 14 // Serial clock
 #define RCLK  15 // Latch
 #define SER   16 // Serial out
-#define ONES  17 // Common cathode
-#define TENS  18 // Common cathode
-#define INTR  19 // Interrupt pin
 
 #define NUM_SEG 8
 #define DIGITS  10
@@ -23,11 +22,16 @@ byte digits[DIGITS][NUM_SEG] = {
    { 1,  1,  1,  1,  0,  1,  1,  0 }  // 10010000 9
 };
 
-static unsigned i;
 static byte lo_byte; // The "1s" column
 static byte hi_byte; // The "10s" column
-volatile long curr_millis;
-volatile long prev_millis;
+static volatile int i;
+
+IntervalTimer timer;
+
+void resetTimer()
+{
+  i = 0;  
+}
 
 void setup() 
 {
@@ -35,53 +39,38 @@ void setup()
   pinMode(SER, OUTPUT);  
   pinMode(SRCLK, OUTPUT);
   pinMode(RCLK, OUTPUT);
-  pinMode(ONES, OUTPUT);
-  pinMode(TENS, OUTPUT);
-
-  pinMode(INTR, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(INTR), seti, RISING);
-
-  prev_millis = millis();
-}
-
-void seti()
-{
-  i = 24;  
 }
 
 void loop() 
 {   
-  /*** Count from 0-99 on the 7-seg. display ***/
+  // Clear interrupt flag (cli)
+  noInterrupts();
+  // Enable interrupts
+  interrupts();
   
-  // Sleep 200 (non-blocking)
-  if (((curr_millis = millis()) - prev_millis) >= 200)
+  /*
+    Delay between increment is 200ms * 100 iterations
+    This would be 20,000,000 microseconds
+  */
+  timer.begin(resetTimer, 200 * 100 * 1000);
+  
+  while (true)
   {  
-    prev_millis = curr_millis;
-    lo_byte = hi_byte = 0x00;
+    lo_byte = hi_byte = 0;
     
     // Shift in the segment bits for the current number
     for (int j = 0; j < NUM_SEG; j++)
     {
-      lo_byte |= ((!digits[i / 10][j]) << (8 - 1 - j));
-      hi_byte |= ((!digits[i % 10][j]) << (8 - 1 - j));
+      lo_byte |= ((!digits[i % 10][j]) << (8 - 1 - j));
+      hi_byte |= ((!digits[i / 10][j]) << (8 - 1 - j));
     }
 
-    i = (i < 99) ? (i + 1) : 0;
+    digitalWrite(RCLK, LOW);
+    shiftOut(SER, SRCLK, LSBFIRST, lo_byte);
+    shiftOut(SER, SRCLK, LSBFIRST, hi_byte);
+    digitalWrite(RCLK, HIGH);
+
+    delay(200);
+    i++;
   }
-    
-  /*** Multiplex digits ***/
-
-  // Write to "1s" column
-  digitalWrite(ONES, HIGH);
-  digitalWrite(TENS, LOW);
-  digitalWrite(RCLK, LOW);
-  shiftOut(SER, SRCLK, LSBFIRST, lo_byte);
-  digitalWrite(RCLK, HIGH);
-
-  // Write to "10s" column
-  digitalWrite(ONES, LOW);
-  digitalWrite(TENS, HIGH);
-  digitalWrite(RCLK, LOW);
-  shiftOut(SER, SRCLK, LSBFIRST, hi_byte);
-  digitalWrite(RCLK, HIGH);
 }
