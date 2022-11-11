@@ -1,74 +1,62 @@
 #include <CapacitiveSensor.h>
 #include "pitches.h"
-#include "limits.h"
+#include "math.h"
 
-#undef  ULONG_MAX
-#define ULONG_MAX (LONG_MAX * 2UL + 1UL)
-#define OUT 20
-#define TX  21
-#define RX  22
-#define LED 13
+#define FLOAT_MAX (pow(2, (sizeof(float) * 8)))
+#define BUZZER  9
+#define LED_OUT 10
+#define ONB_LED 13
+#define TX      21
+#define RX      22
 
-static long val, max_val, min_val = ULONG_MAX;
+static byte map_buzzer, map_led;
+static float val, max_val, min_val = FLOAT_MAX;
 CapacitiveSensor sensor = CapacitiveSensor(TX, RX);
 
 void setup()
 {
   Serial.begin(9600);
 
-  pinMode(OUT, OUTPUT);
-  pinMode(LED, OUTPUT);
+  pinMode(BUZZER, OUTPUT);
+  pinMode(LED_OUT, OUTPUT);
+  pinMode(ONB_LED, OUTPUT);
   pinMode(TX, OUTPUT);
   pinMode(RX, INPUT);
 
   // Get min and max readings
-  digitalWrite(LED, HIGH);
+  digitalWrite(ONB_LED, HIGH);
   while (millis() < 5000)
   {
-    val = analogRead(RX);
+    val = sensor.capacitiveSensor(30);
     if (val < min_val)
       min_val = val;
     if (val > max_val)
       max_val = val;
   }
-  digitalWrite(LED, LOW);
+  digitalWrite(ONB_LED, LOW);
+
+  // Make sure they are within proper bounds
+  if (min_val < 0)
+    min_val = 0;
+  if (max_val > FLOAT_MAX)
+    max_val = FLOAT_MAX;
 }
 
 void loop()
 {
-  // Buzzer
-  //  if ((curr_millis = millis()) >= prev_millis + 1000)
-  //  {
-  //    prev_millis = curr_millis;
-  //    res = analogRead(ANLG_READ);
-  //    Serial.println(res, DEC);
-  //    noTone(BUZZER);
-  //  }
+  // Get capacitance from tinfoil
+  val = sensor.capacitiveSensor(30); // Avg. of 30 values
 
-  //  if      (res >= 1000)
-  //    tone(BUZZER, NOTE_C1);
-  //  else if (res >= 875)
-  //    tone(BUZZER, NOTE_C2);
-  //  else if (res >= 750)
-  //    tone(BUZZER, NOTE_C3);
-  //  else if (res >= 625)
-  //    tone(BUZZER, NOTE_C4);
-  //  else if (res >= 500)
-  //    tone(BUZZER, NOTE_C5);
-  //  else if (res >= 375)
-  //    tone(BUZZER, NOTE_C6);
-  //  else if (res >= 150)
-  //    tone(BUZZER, NOTE_C7);
-  //  else if (res >= 0)
-  //    tone(BUZZER, NOTE_C8);
+  // Buzzer
+  noTone(BUZZER);
+  // Map min and max to 8-bit range
+  map_buzzer = (byte)map(val, min_val, max_val, NOTE_C1, NOTE_C8);
+  tone(BUZZER, map_buzzer);
 
   // LED
-  val = sensor.capacitiveSensor(30); // Avg. of 30 values
-  Serial.println(val, DEC);
-
-  // Map min and max to 8-bit range
-  map(val, min_val, max_val, 0, 255);
-  analogWrite(OUT, val);
+  analogWrite(LED_OUT, map_led);
+  map_led = (byte)map(val, min_val, max_val, 0, 255);
+  Serial.println("Mapped value = " + String(map_led));
 
   delay(10);
 }
