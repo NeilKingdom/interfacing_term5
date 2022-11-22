@@ -1,0 +1,512 @@
+[
+    {
+        "id": "41178a9bf437f688",
+        "type": "tab",
+        "label": "Toggle tri-color LED",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "f73904de4f8129fe",
+        "type": "arduino in",
+        "z": "41178a9bf437f688",
+        "name": "Pushbutton (pin 3)",
+        "pin": "3",
+        "state": "INPUT",
+        "arduino": "6590be2139c50b92",
+        "x": 110,
+        "y": 280,
+        "wires": [
+            [
+                "b1cf41638f44daaf"
+            ]
+        ]
+    },
+    {
+        "id": "1bfdb5c6261ccd2e",
+        "type": "function",
+        "z": "41178a9bf437f688",
+        "name": "Dim",
+        "func": "var dimmer = flow.get(\"dimmer\");\nif (dimmer === undefined)\n{\n    dimmer = 0;\n}\nvar pinValue = Number(255 * dimmer / 100).toFixed();\nflow.set(\"dimValue\", pinValue)\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 260,
+        "wires": [
+            [
+                "5be0e5622dcc7c59",
+                "3686697572498b1a"
+            ]
+        ]
+    },
+    {
+        "id": "06bdc5acab84f231",
+        "type": "function",
+        "z": "41178a9bf437f688",
+        "name": "Dim",
+        "func": "var dimmer = flow.get(\"dimmer\");\nif (dimmer === undefined) {\n    dimmer = 0;\n}\nvar pinValue = Number(255 * dimmer / 100).toFixed();\nflow.set(\"dimValue\", pinValue)\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 340,
+        "wires": [
+            [
+                "c5eb2e71406a6051",
+                "bbe4c70ef5cc6d66"
+            ]
+        ]
+    },
+    {
+        "id": "ebee1c4ad2c57a73",
+        "type": "function",
+        "z": "41178a9bf437f688",
+        "name": "Dim",
+        "func": "var dimmer = flow.get(\"dimmer\");\nif (dimmer === undefined) {\n    dimmer = 0;\n}\nvar pinValue = Number(255 * dimmer / 100).toFixed();\nflow.set(\"dimValue\", pinValue)\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 420,
+        "wires": [
+            [
+                "7b462de4b7a64c50",
+                "cc0ec81604c37c2e"
+            ]
+        ]
+    },
+    {
+        "id": "5be0e5622dcc7c59",
+        "type": "arduino out",
+        "z": "41178a9bf437f688",
+        "name": "Red (pin 13)",
+        "pin": "13",
+        "state": "PWM",
+        "arduino": "6590be2139c50b92",
+        "x": 1030,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "7b462de4b7a64c50",
+        "type": "arduino out",
+        "z": "41178a9bf437f688",
+        "name": "Blue (Pin 14)",
+        "pin": "14",
+        "state": "PWM",
+        "arduino": "6590be2139c50b92",
+        "x": 1030,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "c5eb2e71406a6051",
+        "type": "arduino out",
+        "z": "41178a9bf437f688",
+        "name": "Green (Pin 15)",
+        "pin": "15",
+        "state": "PWM",
+        "arduino": "6590be2139c50b92",
+        "x": 1040,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "0304d7b79e982f3e",
+        "type": "range",
+        "z": "41178a9bf437f688",
+        "minin": "0",
+        "maxin": "1024",
+        "minout": "0",
+        "maxout": "100",
+        "action": "clamp",
+        "round": false,
+        "property": "payload",
+        "name": "0-100",
+        "x": 250,
+        "y": 520,
+        "wires": [
+            [
+                "d057e8c6b3da25ca"
+            ]
+        ]
+    },
+    {
+        "id": "3cd56d61b0db1f85",
+        "type": "arduino in",
+        "z": "41178a9bf437f688",
+        "name": "Trim-Pot (A8)",
+        "pin": "8",
+        "state": "ANALOG",
+        "arduino": "6590be2139c50b92",
+        "x": 90,
+        "y": 520,
+        "wires": [
+            [
+                "0304d7b79e982f3e"
+            ]
+        ]
+    },
+    {
+        "id": "e3edc792bea71a11",
+        "type": "comment",
+        "z": "41178a9bf437f688",
+        "name": "Pre-Req: Teensy is running Standard Firmata Plus",
+        "info": "",
+        "x": 210,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "7155a8cfe1bcf70f",
+        "type": "comment",
+        "z": "41178a9bf437f688",
+        "name": "Pin Type: Analog",
+        "info": "",
+        "x": 100,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "416367e3ab346a84",
+        "type": "comment",
+        "z": "41178a9bf437f688",
+        "name": "Tri-Color LED (RGB) w/ PBS and Potentiometer by Neil Kingdom (king0482@algonquinlive.com)",
+        "info": "",
+        "x": 350,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "b1cf41638f44daaf",
+        "type": "debounce",
+        "z": "41178a9bf437f688",
+        "time": "200",
+        "name": "Debounce 200ms",
+        "x": 330,
+        "y": 280,
+        "wires": [
+            [
+                "49a86eca8d5bf638"
+            ]
+        ]
+    },
+    {
+        "id": "bbe4c70ef5cc6d66",
+        "type": "debug",
+        "z": "41178a9bf437f688",
+        "name": "Green",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1010,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "3686697572498b1a",
+        "type": "debug",
+        "z": "41178a9bf437f688",
+        "name": "Red",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1010,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "cc0ec81604c37c2e",
+        "type": "debug",
+        "z": "41178a9bf437f688",
+        "name": "Blue",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1010,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "a6aa300bc5665aee",
+        "type": "comment",
+        "z": "41178a9bf437f688",
+        "name": "Use the trim pot to dim R, G, and B",
+        "info": "",
+        "x": 160,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "49a86eca8d5bf638",
+        "type": "function",
+        "z": "41178a9bf437f688",
+        "name": "Cycle button click: 1, 2, 3, 1, ...",
+        "func": "var clickCount = flow.get(\"rgbState\");\nif (clickCount == undefined)\n{\n    clickCount = 0;\n}\nelse\n{\n    clickCount++;\n}\n\nif (clickCount == 4)\n{\n    clickCount = 1;\n}\nflow.set(\"rgbState\", clickCount);\nmsg.payload = clickCount;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 360,
+        "wires": [
+            [
+                "c3632a28c93bd6e6",
+                "cef48c0e85b0fcfc"
+            ]
+        ]
+    },
+    {
+        "id": "c3632a28c93bd6e6",
+        "type": "switch",
+        "z": "41178a9bf437f688",
+        "name": "",
+        "property": "rgbState",
+        "propertyType": "flow",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "3",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 550,
+        "y": 360,
+        "wires": [
+            [
+                "1bfdb5c6261ccd2e",
+                "32f330297b7ca535",
+                "35a451d5505b5c45"
+            ],
+            [
+                "06bdc5acab84f231",
+                "21ec3d4a3b46092b",
+                "35a451d5505b5c45"
+            ],
+            [
+                "ebee1c4ad2c57a73",
+                "21ec3d4a3b46092b",
+                "32f330297b7ca535"
+            ],
+            [
+                "35a451d5505b5c45",
+                "32f330297b7ca535",
+                "21ec3d4a3b46092b"
+            ]
+        ]
+    },
+    {
+        "id": "32f330297b7ca535",
+        "type": "change",
+        "z": "41178a9bf437f688",
+        "name": "Turn off",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "0",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 800,
+        "y": 380,
+        "wires": [
+            [
+                "c5eb2e71406a6051"
+            ]
+        ]
+    },
+    {
+        "id": "21ec3d4a3b46092b",
+        "type": "change",
+        "z": "41178a9bf437f688",
+        "name": "Turn off",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "0",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 800,
+        "y": 300,
+        "wires": [
+            [
+                "5be0e5622dcc7c59"
+            ]
+        ]
+    },
+    {
+        "id": "35a451d5505b5c45",
+        "type": "change",
+        "z": "41178a9bf437f688",
+        "name": "Turn off",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "0",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 800,
+        "y": 460,
+        "wires": [
+            [
+                "7b462de4b7a64c50"
+            ]
+        ]
+    },
+    {
+        "id": "cef48c0e85b0fcfc",
+        "type": "debug",
+        "z": "41178a9bf437f688",
+        "name": "CLICK COUNT IS:",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 510,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "d057e8c6b3da25ca",
+        "type": "rbe",
+        "z": "41178a9bf437f688",
+        "name": "rbe node: block unless value changes",
+        "func": "rbei",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 490,
+        "y": 520,
+        "wires": [
+            [
+                "422652627cb706c0"
+            ]
+        ]
+    },
+    {
+        "id": "422652627cb706c0",
+        "type": "function",
+        "z": "41178a9bf437f688",
+        "name": "cache dimmer",
+        "func": "flow.set(\"dimmer\", msg.payload)\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 760,
+        "y": 520,
+        "wires": [
+            [
+                "c3632a28c93bd6e6"
+            ]
+        ]
+    },
+    {
+        "id": "8a8204ba01c0644f",
+        "type": "comment",
+        "z": "41178a9bf437f688",
+        "name": "Cycle R>G>B>R... On each push of the pushbutton switch",
+        "info": "",
+        "x": 230,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "50358e60200c6d93",
+        "type": "comment",
+        "z": "41178a9bf437f688",
+        "name": "Pin Type: Analog",
+        "info": "",
+        "x": 1040,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "97819f1129090f0c",
+        "type": "comment",
+        "z": "41178a9bf437f688",
+        "name": "// DEBUG",
+        "info": "",
+        "x": 480,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "6590be2139c50b92",
+        "type": "arduino-board",
+        "device": "/dev/ttyACM0"
+    }
+]

@@ -1,0 +1,933 @@
+[
+    {
+        "id": "0fdf314405a60714",
+        "type": "tab",
+        "label": "Temperature Dashboard",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "171a286b482443e6",
+        "type": "arduino in",
+        "z": "0fdf314405a60714",
+        "name": "Thermistor (A1)",
+        "pin": "1",
+        "state": "ANALOG",
+        "arduino": "6590be2139c50b92",
+        "x": 180,
+        "y": 240,
+        "wires": [
+            [
+                "cc03c8fb6254ea07"
+            ]
+        ]
+    },
+    {
+        "id": "0511c1ce2b28b6fe",
+        "type": "function",
+        "z": "0fdf314405a60714",
+        "name": "Get cached temperature",
+        "func": "var celsius = flow.get(\"temp\");\nmsg.payload = celsius.toFixed(1);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 230,
+        "y": 400,
+        "wires": [
+            [
+                "3e0c3e1fab463b4b",
+                "96f093104a3556a2",
+                "e5f2a7ba8ece4f82",
+                "c7909c3c56e17604"
+            ]
+        ]
+    },
+    {
+        "id": "7d59eb32c30b7c5e",
+        "type": "function",
+        "z": "0fdf314405a60714",
+        "name": "Get cached temperature",
+        "func": "msg.payload = flow.get(\"temp\");\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 230,
+        "y": 440,
+        "wires": [
+            [
+                "650f650759947a0d"
+            ]
+        ]
+    },
+    {
+        "id": "5a26545b88bb1262",
+        "type": "function",
+        "z": "0fdf314405a60714",
+        "name": "Get cached temperature",
+        "func": "msg.payload = flow.get(\"temp\");\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 230,
+        "y": 480,
+        "wires": [
+            [
+                "6bb6d04e8f64bf02"
+            ]
+        ]
+    },
+    {
+        "id": "743f342222cda15f",
+        "type": "arduino in",
+        "z": "0fdf314405a60714",
+        "name": "PBS (Pin 3)",
+        "pin": "3",
+        "state": "INPUT",
+        "arduino": "6590be2139c50b92",
+        "x": 170,
+        "y": 340,
+        "wires": [
+            [
+                "7d4af73a5d950e68"
+            ]
+        ]
+    },
+    {
+        "id": "f6abdd224d6b340d",
+        "type": "comment",
+        "z": "0fdf314405a60714",
+        "name": "Pre-Req: Teensy is running Standard Firmata Plus",
+        "info": "",
+        "x": 290,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "37a5aa081edfe666",
+        "type": "comment",
+        "z": "0fdf314405a60714",
+        "name": "Press PBS to toggle temperature scale: Celsius > Fahrenheit > Kelvin > Celsius...",
+        "info": "",
+        "x": 380,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "fd334c0cf287ee63",
+        "type": "comment",
+        "z": "0fdf314405a60714",
+        "name": "Temperature Flow by Neil Kingdom (king0482@algonquinlive.com)",
+        "info": "",
+        "x": 340,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "7d4af73a5d950e68",
+        "type": "debounce",
+        "z": "0fdf314405a60714",
+        "time": "200",
+        "name": "Debounce 200ms",
+        "x": 350,
+        "y": 340,
+        "wires": [
+            [
+                "2e428254a0fc4871"
+            ]
+        ]
+    },
+    {
+        "id": "fa126c1b20ea34f9",
+        "type": "debug",
+        "z": "0fdf314405a60714",
+        "name": "display: Temperature in Fahrenheit",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1020,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "461e59c946586f92",
+        "type": "debug",
+        "z": "0fdf314405a60714",
+        "name": "display: Temperature in Celsius",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1010,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "82fbe481669e3a93",
+        "type": "debug",
+        "z": "0fdf314405a60714",
+        "name": "display: Temperature in Kelvin",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1010,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "2e428254a0fc4871",
+        "type": "function",
+        "z": "0fdf314405a60714",
+        "name": "Cycle button click: 1, 2, 3, 1, ...",
+        "func": "var clickCount = flow.get(\"buttonState\");\n\nif (clickCount === undefined)\n    clickCount = 0;\nelse\n    clickCount++;\n\nif (clickCount === 4)\n    clickCount = 1;\n\nflow.set(\"buttonState\", clickCount);\nmsg.payload = clickCount;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 340,
+        "wires": [
+            [
+                "5a228ff068ca575b"
+            ]
+        ]
+    },
+    {
+        "id": "5a228ff068ca575b",
+        "type": "switch",
+        "z": "0fdf314405a60714",
+        "name": "",
+        "property": "buttonState",
+        "propertyType": "flow",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "3",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 790,
+        "y": 340,
+        "wires": [
+            [
+                "0511c1ce2b28b6fe",
+                "49ec71ee838c302a"
+            ],
+            [
+                "7d59eb32c30b7c5e",
+                "314acc69f0a72e1a"
+            ],
+            [
+                "5a26545b88bb1262",
+                "eaa8ee3d8174abf5"
+            ]
+        ]
+    },
+    {
+        "id": "ee0b612e3b15b61e",
+        "type": "function",
+        "z": "0fdf314405a60714",
+        "name": "cache temperature",
+        "func": "flow.set(\"temp\", msg.payload)\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f078f858cecabc69",
+        "type": "comment",
+        "z": "0fdf314405a60714",
+        "name": "// DEBUG: Celsius (cache)",
+        "info": "",
+        "x": 910,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "cc03c8fb6254ea07",
+        "type": "function",
+        "z": "0fdf314405a60714",
+        "name": "Connect Pin (A1) to Celsius",
+        "func": "var code = msg.payload;\nvar celsius;\n\nif (code <= 289) {\n    celsius = 5 + (code - 289) / 9.82;\n}\nif (code > 289 && code <= 342) {\n    celsius = 10 + (code - 342) / 10.60;\n}\nif (code > 342 && code <= 398) {\n    celsius = 15 + (code - 398) / 11.12;\n}\nif (code > 398 && code <= 455) {\n    celsius = 20 + (code - 455) / 11.36;\n}\nif (code > 455 && code <= 512) {\n    celsius = 25 + (code - 512) / 11.32;\n}\nif (code > 512 && code <= 566) {\n    celsius = 30 + (code - 566) / 11.00;\n}\nif (code > 566 && code <= 619) {\n    celsius = 35 + (code - 619) / 10.44;\n}\nif (code > 619 && code <= 667) {\n    celsius = 40 + (code - 667) / 9.73;\n}\nif (code > 667) {\n    celsius = 45 + (code - 712) / 8.90;\n}\n\nmsg.payload = celsius;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 240,
+        "wires": [
+            [
+                "ee0b612e3b15b61e",
+                "ffb944a26aaedebf"
+            ]
+        ]
+    },
+    {
+        "id": "3e0c3e1fab463b4b",
+        "type": "template",
+        "z": "0fdf314405a60714",
+        "name": "Temperature: Celsius",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "Temperature in Celsius: {{payload}}°C",
+        "output": "str",
+        "x": 740,
+        "y": 400,
+        "wires": [
+            [
+                "461e59c946586f92"
+            ]
+        ]
+    },
+    {
+        "id": "508f831870d5a427",
+        "type": "template",
+        "z": "0fdf314405a60714",
+        "name": "Temperature: Fahrenheit",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "Temperature in Fahrenheit: {{payload}}°F",
+        "output": "str",
+        "x": 750,
+        "y": 440,
+        "wires": [
+            [
+                "fa126c1b20ea34f9"
+            ]
+        ]
+    },
+    {
+        "id": "c3397a07edef6220",
+        "type": "template",
+        "z": "0fdf314405a60714",
+        "name": "Temperature: Kelvin",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "Temperature in Kelvin: {{payload}}°K",
+        "output": "str",
+        "x": 740,
+        "y": 480,
+        "wires": [
+            [
+                "82fbe481669e3a93"
+            ]
+        ]
+    },
+    {
+        "id": "650f650759947a0d",
+        "type": "function",
+        "z": "0fdf314405a60714",
+        "name": "Convert celsius to Fahrenheit",
+        "func": "var celsius = msg.payload;\nvar fahrenheit = (celsius * (9 / 5)) + 32\nmsg.payload = fahrenheit.toFixed(1);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 440,
+        "wires": [
+            [
+                "508f831870d5a427",
+                "0771f60d1b22b035",
+                "1b3247e83b7b441f",
+                "c7909c3c56e17604"
+            ]
+        ]
+    },
+    {
+        "id": "6bb6d04e8f64bf02",
+        "type": "function",
+        "z": "0fdf314405a60714",
+        "name": "Convert Celsius to Kelvin",
+        "func": "var celsius = msg.payload;\nvar kelvin = celsius + 273.15;\nmsg.payload = kelvin.toFixed(1);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 480,
+        "wires": [
+            [
+                "c3397a07edef6220",
+                "bb3f1f2b2a4e3391",
+                "50e8cb5b9e4b4776",
+                "c7909c3c56e17604"
+            ]
+        ]
+    },
+    {
+        "id": "ffb944a26aaedebf",
+        "type": "debug",
+        "z": "0fdf314405a60714",
+        "name": "msg.payload",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 690,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "49ec71ee838c302a",
+        "type": "change",
+        "z": "0fdf314405a60714",
+        "name": "ui_control: Celsius",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            },
+            {
+                "t": "set",
+                "p": "ui_control",
+                "pt": "msg",
+                "to": "{\"min\":0,\"max\":50,\"className\":\"C\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 210,
+        "y": 560,
+        "wires": [
+            [
+                "c7909c3c56e17604"
+            ]
+        ]
+    },
+    {
+        "id": "eaa8ee3d8174abf5",
+        "type": "change",
+        "z": "0fdf314405a60714",
+        "name": "ui_control: Kelvin",
+        "rules": [
+            {
+                "t": "set",
+                "p": "ui_control",
+                "pt": "msg",
+                "to": "{\"min\": 200, \"max\": 400, \"className\": \"K\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 210,
+        "y": 640,
+        "wires": [
+            [
+                "c7909c3c56e17604"
+            ]
+        ]
+    },
+    {
+        "id": "314acc69f0a72e1a",
+        "type": "change",
+        "z": "0fdf314405a60714",
+        "name": "ui_control: Fahrenheit",
+        "rules": [
+            {
+                "t": "set",
+                "p": "ui_control",
+                "pt": "msg",
+                "to": "{\"min\": 32, \"max\": 100, \"className\": \"F\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 220,
+        "y": 600,
+        "wires": [
+            [
+                "c7909c3c56e17604"
+            ]
+        ]
+    },
+    {
+        "id": "96f093104a3556a2",
+        "type": "ui_chart",
+        "z": "0fdf314405a60714",
+        "name": "[Temperature] Graph Celsius",
+        "group": "c246223b90fe90fc",
+        "order": 1,
+        "width": 6,
+        "height": 9,
+        "label": "Temperature (°C)",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "auto",
+        "interpolate": "linear",
+        "nodata": "Error - No Temperature!",
+        "dot": true,
+        "ymin": "0",
+        "ymax": "50",
+        "removeOlder": 1,
+        "removeOlderPoints": "1000",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1020,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "acbc0e5c568b3433",
+        "type": "inject",
+        "z": "0fdf314405a60714",
+        "name": "refresh (1s)",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 190,
+        "y": 720,
+        "wires": [
+            [
+                "d4321cc47c02029e"
+            ]
+        ]
+    },
+    {
+        "id": "d4321cc47c02029e",
+        "type": "change",
+        "z": "0fdf314405a60714",
+        "name": "delete msg.payload",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 390,
+        "y": 720,
+        "wires": [
+            [
+                "c7909c3c56e17604"
+            ]
+        ]
+    },
+    {
+        "id": "e5f2a7ba8ece4f82",
+        "type": "template",
+        "z": "0fdf314405a60714",
+        "name": "The temperature is {{payload}} Celsius",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "The temperature is {{payload}} Celsius",
+        "output": "str",
+        "x": 450,
+        "y": 800,
+        "wires": [
+            [
+                "9ecbdf27f78c5653"
+            ]
+        ]
+    },
+    {
+        "id": "0771f60d1b22b035",
+        "type": "template",
+        "z": "0fdf314405a60714",
+        "name": "The temperature is {{payload}} Fahrenheit",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "The temperature is {{payload}} Fahrenheit",
+        "output": "str",
+        "x": 460,
+        "y": 840,
+        "wires": [
+            [
+                "9ecbdf27f78c5653"
+            ]
+        ]
+    },
+    {
+        "id": "bb3f1f2b2a4e3391",
+        "type": "template",
+        "z": "0fdf314405a60714",
+        "name": "The temperature is {{payload}} Kelvin",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "The temperature is {{payload}} Kelvin",
+        "output": "str",
+        "x": 450,
+        "y": 880,
+        "wires": [
+            [
+                "9ecbdf27f78c5653"
+            ]
+        ]
+    },
+    {
+        "id": "9ecbdf27f78c5653",
+        "type": "ui_audio",
+        "z": "0fdf314405a60714",
+        "name": "Say it",
+        "group": "cf1d69ec9d16ab54",
+        "voice": "Google US English",
+        "always": "",
+        "x": 950,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "c4adf9e288fad36e",
+        "type": "ui_text",
+        "z": "0fdf314405a60714",
+        "group": "31b140f6140512b9",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "@author Neil Kingdom (king0482@algonquinlive.com)",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "x": 1100,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "1b3247e83b7b441f",
+        "type": "ui_chart",
+        "z": "0fdf314405a60714",
+        "name": "[Temperature] Graph Fahrenheit",
+        "group": "373a13f18ce95029",
+        "order": 1,
+        "width": 6,
+        "height": 9,
+        "label": "Temperature (°F)",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "auto",
+        "interpolate": "linear",
+        "nodata": "Error - No Temperature!",
+        "dot": true,
+        "ymin": "32",
+        "ymax": "100",
+        "removeOlder": 1,
+        "removeOlderPoints": "1000",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1030,
+        "y": 660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "50e8cb5b9e4b4776",
+        "type": "ui_chart",
+        "z": "0fdf314405a60714",
+        "name": "[Temperature] Graph Kelvin",
+        "group": "8864a1d532bf5b5d",
+        "order": 1,
+        "width": 6,
+        "height": 9,
+        "label": "Temperature (°K)",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "auto",
+        "interpolate": "linear",
+        "nodata": "Error - No Temperature!",
+        "dot": true,
+        "ymin": "200",
+        "ymax": "400",
+        "removeOlder": 1,
+        "removeOlderPoints": "1000",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1020,
+        "y": 700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "04add9948763173a",
+        "type": "comment",
+        "z": "0fdf314405a60714",
+        "name": "To see Dashboard, URL base /ui",
+        "info": "",
+        "x": 1030,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "9d0795fa5039c059",
+        "type": "comment",
+        "z": "0fdf314405a60714",
+        "name": "Group: Gauge, Tab Temperature",
+        "info": "",
+        "x": 1330,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "3817127dea730271",
+        "type": "comment",
+        "z": "0fdf314405a60714",
+        "name": "3 grups for each unit: C, F, K",
+        "info": "",
+        "x": 1320,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "68d21dc78c0b2619",
+        "type": "comment",
+        "z": "0fdf314405a60714",
+        "name": "Text-to-Speech",
+        "info": "",
+        "x": 980,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "c7909c3c56e17604",
+        "type": "ui_gauge",
+        "z": "0fdf314405a60714",
+        "name": "[Temperature] Gauge",
+        "group": "24d3e17edd74bd25",
+        "order": 0,
+        "width": "6",
+        "height": "4",
+        "gtype": "gage",
+        "title": "Gauge",
+        "label": "°{{className}}",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "50",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "C",
+        "x": 1000,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "6590be2139c50b92",
+        "type": "arduino-board",
+        "device": "/dev/ttyACM0"
+    },
+    {
+        "id": "c246223b90fe90fc",
+        "type": "ui_group",
+        "name": "Graph Celsius",
+        "tab": "7b7821256125df04",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "cf1d69ec9d16ab54",
+        "type": "ui_group",
+        "name": "Gauge",
+        "tab": "7b7821256125df04",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "31b140f6140512b9",
+        "type": "ui_group",
+        "name": "Author",
+        "tab": "5b00e3ec8ae6c1c9",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "373a13f18ce95029",
+        "type": "ui_group",
+        "name": "Graph Fahrenheit",
+        "tab": "7b7821256125df04",
+        "order": 4,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "8864a1d532bf5b5d",
+        "type": "ui_group",
+        "name": "Graph Kelvin",
+        "tab": "7b7821256125df04",
+        "order": 5,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "24d3e17edd74bd25",
+        "type": "ui_group",
+        "name": "Gauge",
+        "tab": "7b7821256125df04",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "7b7821256125df04",
+        "type": "ui_tab",
+        "name": "Temperature",
+        "icon": "fa-thermometer-empty",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "5b00e3ec8ae6c1c9",
+        "type": "ui_tab",
+        "name": "About",
+        "icon": "fa-info",
+        "disabled": false,
+        "hidden": false
+    }
+]
