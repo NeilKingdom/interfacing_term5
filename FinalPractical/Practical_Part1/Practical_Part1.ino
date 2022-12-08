@@ -1,13 +1,13 @@
-/**
-  Name: Neil Kingdom
-  Email: king0482@algonquinlive.com
-  Expected Grade: 100%
-  Known Issues: N/A
+/**********************************************************
+  Practical Question: Winter 2022
+  Level Achieved: A+
+  Status: Solution is fully working without any known bugs.
+  
+  @author Neil Kingdom
 */
 
-#define MAX_TEMP 50
-#define MIN_TEMP (-20)
-#define NUM_DIGITS (10 + 1)
+#define MAX_TEMP 33
+#define MIN_TEMP 15
 
 #define THERM 14
 #define SRCLR 15
@@ -24,8 +24,7 @@ static const byte nhl[NUM_DIGITS]
 {
   0b11010101,  /* n --> Represents "Normal" Temperature */
   0b10010000,  /* H --> Represents "High" Temperature */
-  0b11100010,  /* L --> Represents "Low" Temperature */
-  0b11111110   /* DP */
+  0b11100010   /* L --> Represents "Low" Temperature */
 };
 
 IntervalTimer inj_lo_timer;
@@ -120,14 +119,12 @@ void loop()
   }
 
   /*** Go back to reading normal temps every 6 seconds ***/
-  if ((curr_millis = millis()) >= (prev_millis + 6 * 1000))
+  if ((curr_millis = millis()) >= (prev_millis + (6 * 1000)))
   {
     prev_millis = curr_millis;  
     intr_flag = 0;
-    inj_lo_timer.end();
-    inj_hi_timer.end();
-    inj_lo_timer.begin(inject_low, 2 * 1000 * 1000);
-    inj_hi_timer.begin(inject_high, 4 * 1000 * 1000);
+    inj_lo_timer.update(inject_low, 2 * 1000 * 1000);
+    inj_hi_timer.update(inject_high, 4 * 1000 * 1000);
   }
 
   /* 
